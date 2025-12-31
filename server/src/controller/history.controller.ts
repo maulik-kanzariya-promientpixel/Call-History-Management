@@ -3,6 +3,7 @@ import getCallsByEndTime from "../service/history.service";
 
 export async function getHistory(req: Request, res: Response) {
   try {
+    console.log("GOTCHA");
     const { limit = "10", lastKey } = req.query;
 
     const parsedLimit = parseInt(limit as string, 10) || 10;
