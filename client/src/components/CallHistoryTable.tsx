@@ -72,7 +72,6 @@ const CallHistoryTable: React.FC = () => {
     const csvContent = [
       headers.join(','),
       ...rows.map(row => row.map(cell => {
-        // Handle null/undefined and escape quotes
         const cellValue = cell === null || cell === undefined ? '' : String(cell);
         return `"${cellValue.replace(/"/g, '""')}"`;
       }).join(','))
@@ -107,7 +106,7 @@ const CallHistoryTable: React.FC = () => {
 
   if (error) return (
     <div className="p-8 text-center text-red-500 font-medium bg-red-50 rounded-lg mx-auto max-w-lg mt-10 border border-red-100 shadow-sm">
-      <div className="mb-2">⚠️ Error loading data</div>
+      <div className="mb-2"> Error loading data</div>
       {error}
     </div>
   );
@@ -115,7 +114,6 @@ const CallHistoryTable: React.FC = () => {
   return (
     <>
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 animate-fade-in">
-        {/* Header Controls */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
           <div className="flex items-center gap-4 w-full md:w-auto">
             <h2 className="text-xl font-semibold text-gray-900 whitespace-nowrap">Call History</h2>
@@ -166,7 +164,6 @@ const CallHistoryTable: React.FC = () => {
           </div>
         </div>
         
-        {/* Table Area */}
         <div className="overflow-x-auto rounded-lg border border-gray-100">
           <table className="w-full text-left whitespace-nowrap">
             <thead>
@@ -251,7 +248,6 @@ const CallHistoryTable: React.FC = () => {
           </table>
         </div>
 
-        {/* Pagination Footer */}
         {!loading && filteredData.length > 0 && (
           <div className="px-6 py-4 flex items-center justify-between border-t border-gray-100 mt-4">
             <div className="text-sm text-gray-500">

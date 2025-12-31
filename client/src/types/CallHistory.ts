@@ -1,12 +1,12 @@
 export interface CallHistory {
     contactId: string;
     direction: 'INBOUND' | 'OUTBOUND' | 'TRANSFER' | 'CALLBACK' | 'API';
-    callStartTime: string; // ISO Date string
-    callEndTime: string;   // ISO Date string
+    callStartTime: string;
+    callEndTime: string;
     customerPhone: string;
     agentUsername: string;
     recordingS3Uri: string;
-    createdAt: string;     // ISO Date string
+    createdAt: string;
 }
 
 export interface CallHistoryResponse {
