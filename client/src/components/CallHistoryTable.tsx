@@ -113,11 +113,11 @@ const CallHistoryTable: React.FC = () => {
 
   return (
     <>
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 animate-fade-in">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-6 animate-fade-in">
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
           <div className="flex items-center gap-4 w-full md:w-auto">
-            <h2 className="text-xl font-semibold text-gray-900 whitespace-nowrap">Call History</h2>
-            <span className="bg-gray-100 text-gray-600 py-1 px-3 rounded-full text-xs font-medium">
+            <h2 className="text-xl font-semibold text-foreground whitespace-nowrap">Call History</h2>
+            <span className="bg-muted text-muted-foreground py-1 px-3 rounded-full text-xs font-medium">
               {history.length} Total
             </span>
           </div>
@@ -167,13 +167,13 @@ const CallHistoryTable: React.FC = () => {
         <div className="overflow-x-auto rounded-lg border border-gray-100">
           <table className="w-full text-left whitespace-nowrap">
             <thead>
-              <tr className="bg-gray-50/80 border-b border-gray-200">
-                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Contact ID</th>
-                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Direction</th>
-                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer Phone</th>
-                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Agent</th>
-                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Start Time</th>
-                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">End Time</th>
+              <tr className="bg-muted/50 border-b border-border">
+                <th className="px-6 py-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Contact ID</th>
+                <th className="px-6 py-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Direction</th>
+                <th className="px-6 py-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Customer Phone</th>
+                <th className="px-6 py-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Agent</th>
+                <th className="px-6 py-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Start Time</th>
+                <th className="px-6 py-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">End Time</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -181,7 +181,7 @@ const CallHistoryTable: React.FC = () => {
                 Array.from({ length: 5 }).map((_, i) => <SkeletonRow key={i} />)
               ) : paginatedData.length > 0 ? (
                 paginatedData.map((call) => (
-                  <tr key={call.contactId} className="hover:bg-gray-50 transition-colors group">
+                  <tr key={call.contactId} className="hover:bg-muted/50 transition-colors group">
                     <td className="px-6 py-4 text-sm text-gray-500 font-mono" title={call.contactId}>
                       {call.contactId.slice(0, 8)}...
                     </td>

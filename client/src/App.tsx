@@ -1,10 +1,15 @@
-import CallHistoryPage from './pages/CallHistoryPage';
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routes/AppRoutes";
+import { ThemeProvider } from "./Provider/ThemeProvider";
+import { CallHistoryProvider } from "./context/CallHistoryContext";
 
 function App() {
   return (
-    <div className="App">
-      <CallHistoryPage />
-    </div>
+    <ThemeProvider>
+      <CallHistoryProvider>
+        <RouterProvider router={router} />
+      </CallHistoryProvider>
+    </ThemeProvider>
   );
 }
 
