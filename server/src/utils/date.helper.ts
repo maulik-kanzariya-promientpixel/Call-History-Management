@@ -13,6 +13,7 @@ export function getMonthsBetween(startDate: string, endDate: string): string[] {
     months.push(`${year}-${month}`);
     current.setMonth(current.getMonth() + 1);
   }
+  console.log("helper getMonthsBetween" + months);
 
   return months;
 }
@@ -28,6 +29,8 @@ export function getMonthDateRange(
 
   const rangeStart = startDate > monthStart ? startDate : monthStart;
   const rangeEnd = endDate < monthEnd ? endDate : monthEnd;
+
+  console.log("helper getMonthDateRange" + rangeStart + " " + rangeEnd);
 
   return { start: rangeStart, end: rangeEnd };
 }
