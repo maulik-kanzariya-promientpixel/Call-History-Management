@@ -9,7 +9,7 @@ export default async function getCallRecordingsWithSignedUrls(
 ) {
   try {
     const params = {
-      TableName: "call-history-db",
+      TableName: "call-history",
       KeyConditionExpression: "contactId = :contactId",
       ExpressionAttributeValues: {
         ":contactId": contactId,
@@ -35,24 +35,37 @@ export default async function getCallRecordingsWithSignedUrls(
       return null;
     }
 
-    const s3UrlMatch =
-      item.recordingS3Uri.match(/s3:\/\/([^\/]+)\/(.+)/) ||
-      item.recordingS3Uri.match(
+    let bucket, key;
+
+    if (item.recordingS3Uri.startsWith("s3://")) {
+      const s3Match = item.recordingS3Uri.match(/s3:\/\/([^\/]+)\/(.+)/);
+      if (s3Match) {
+        [, bucket, key] = s3Match;
+      }
+    } else if (item.recordingS3Uri.startsWith("https://")) {
+      const httpsMatch = item.recordingS3Uri.match(
         /https:\/\/([^.]+)\.s3\.([^.]+\.)?amazonaws\.com\/(.+)/
       );
-
-    if (!s3UrlMatch) {
+      if (httpsMatch) {
+        [, bucket, , key] = httpsMatch;
+      }
+    } else if (item.recordingS3Uri.includes("/")) {
+      const parts = item.recordingS3Uri.split("/");
+      bucket = parts[0];
+      key = parts.slice(1).join("/");
+    } else {
       throw new Error(`Invalid S3 URL format: ${item.recordingS3Uri}`);
     }
 
-    let bucket, key;
-    if (s3UrlMatch[0].startsWith("s3://")) {
-      [, bucket, key] = s3UrlMatch;
-    } else {
-      [, bucket, , key] = s3UrlMatch;
+    if (!bucket || !key) {
+      throw new Error(
+        `Could not parse bucket and key from: ${item.recordingS3Uri}`
+      );
     }
 
     key = decodeURIComponent(key);
+
+    console.log("Found recording - Bucket:", bucket, "Key:", key);
 
     const command = new GetObjectCommand({
       Bucket: bucket,

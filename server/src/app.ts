@@ -3,12 +3,14 @@ import historyRouter from "./routes/history.router";
 import cors from "cors";
 
 const app = express();
+process.loadEnvFile();
 
 app.use(cors());
 
 app.use("/", historyRouter);
 
-const port = 3000;
+const port = process.env.PORT ?? 3000;
+
 app.listen(port, () => {
   console.log(`Connected successfully on port ${port}`);
 });

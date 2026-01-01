@@ -1,19 +1,38 @@
 import { Request, Response } from "express";
-import getCallsByEndTime from "../service/history.service";
 import getCallRecordingsWithSignedUrls from "../service/recording.service";
+import getRecords from "../service/interval.service";
 
 export async function getHistory(req: Request, res: Response) {
   try {
-    console.log("GOTCHA");
-    const { limit = "10", lastKey } = req.query;
+    const { startTime, endTime, limit = "10", nextToken } = req.query;
+
+    if (!startTime || !endTime) {
+      return res.status(400).json({
+        message: "startTime and endTime are required parameters",
+      });
+    }
 
     const parsedLimit = parseInt(limit as string, 10) || 10;
-    const parsedLastKey = lastKey ? JSON.parse(lastKey as string) : null;
 
-    const history = await getCallsByEndTime(parsedLimit, parsedLastKey);
+    const history = await getRecords(
+      startTime as string,
+      endTime as string,
+      parsedLimit,
+      (nextToken as string) || null
+    );
 
     res.status(200).json(history);
   } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message === "Invalid pagination token"
+    ) {
+      return res.status(400).json({
+        message: "Invalid pagination token",
+        error: error.message,
+      });
+    }
+
     res.status(500).json({
       message: "Internal Server Error",
       error,
