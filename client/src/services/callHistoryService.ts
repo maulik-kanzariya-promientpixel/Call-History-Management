@@ -1,15 +1,19 @@
 import type { CallHistory } from '../types/CallHistory';
 
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://localhost:3000';
 
 export const fetchCallHistory = async (): Promise<CallHistory[]> => {
     try {
-        const response = await fetch(`${API_BASE_URL}/call-history`);
+        const response = await fetch(`${API_BASE_URL}/history`);
+        console.log(response);
+
         if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
         }
         const data = await response.json();
-        return Array.isArray(data) ? data : data.data || [];
+        console.log(data);
+
+        return Array.isArray(data) ? data : data.items || [];
     } catch (error) {
         console.error("Failed to fetch call history:", error);
         return [

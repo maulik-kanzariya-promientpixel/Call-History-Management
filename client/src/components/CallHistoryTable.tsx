@@ -23,8 +23,8 @@ const CallHistoryTable: React.FC = () => {
 
   const filteredData = useMemo(() => {
     return history.filter(call => {
-      const matchesSearch = 
-        call.customerPhone.includes(searchTerm) || 
+      const matchesSearch =
+        call.customerPhone.includes(searchTerm) ||
         call.agentUsername.toLowerCase().includes(searchTerm.toLowerCase()) ||
         call.contactId.includes(searchTerm);
       const matchesFilter = filterDirection === 'ALL' || call.direction === filterDirection;
@@ -151,8 +151,8 @@ const CallHistoryTable: React.FC = () => {
             <div className='items-center flex'>
               <div className='bg-indigo-600 text-white px-4 py-2 rounded-lg cursor-pointer' onClick={exportHistory}>Export</div>
             </div>
-            <button 
-              onClick={refreshHistory} 
+            <button
+              onClick={refreshHistory}
               className="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
               title="Refresh Data"
             >
@@ -163,7 +163,7 @@ const CallHistoryTable: React.FC = () => {
 
           </div>
         </div>
-        
+
         <div className="overflow-x-auto rounded-lg border border-gray-100">
           <table className="w-full text-left whitespace-nowrap">
             <thead>
@@ -192,12 +192,14 @@ const CallHistoryTable: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700 font-medium">{call.customerPhone}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">
-                      <div className="flex items-center gap-2">
+                      {call.agentUsername ? <div className="flex items-center gap-2">
                         <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 text-white flex items-center justify-center text-xs font-bold shadow-sm">
                           {call.agentUsername.charAt(0).toUpperCase()}
                         </div>
                         {call.agentUsername}
-                      </div>
+                      </div> : "-"}
+
+
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
                       {new Date(call.callStartTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -207,16 +209,16 @@ const CallHistoryTable: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 text-sm">
                       {call.recordingS3Uri ? (
-                          <button 
-                            onClick={() => setSelectedRecording(call.recordingS3Uri)}
-                            className="flex items-center text-indigo-600 hover:text-indigo-900 font-medium transition-colors group-hover:bg-indigo-50 px-3 py-1 rounded-md -ml-3"
-                          >
-                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                             </svg>
-                             Listen
-                          </button>
+                        <button
+                          onClick={() => setSelectedRecording(call.recordingS3Uri)}
+                          className="flex items-center text-indigo-600 hover:text-indigo-900 font-medium transition-colors group-hover:bg-indigo-50 px-3 py-1 rounded-md -ml-3"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          Listen
+                        </button>
                       ) : (
                         <span className="text-gray-400 text-xs italic">No Rec</span>
                       )}
@@ -234,8 +236,8 @@ const CallHistoryTable: React.FC = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                       <p>No call history found matching your filters.</p>
-                      <button 
-                        onClick={() => {setSearchTerm(''); setFilterDirection('ALL');}}
+                      <button
+                        onClick={() => { setSearchTerm(''); setFilterDirection('ALL'); }}
                         className="mt-2 text-indigo-600 hover:text-indigo-800 text-sm font-medium"
                       >
                         Clear filters
@@ -267,11 +269,10 @@ const CallHistoryTable: React.FC = () => {
                 <button
                   key={idx}
                   onClick={() => handlePageChange(idx + 1)}
-                  className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
-                    currentPage === idx + 1
+                  className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${currentPage === idx + 1
                       ? 'bg-indigo-600 text-white shadow-sm'
                       : 'text-gray-600 hover:bg-gray-50 hover:text-indigo-600'
-                  }`}
+                    }`}
                 >
                   {idx + 1}
                 </button>
@@ -290,7 +291,7 @@ const CallHistoryTable: React.FC = () => {
         )}
       </div>
 
-      <AudioPlayerModal 
+      <AudioPlayerModal
         isOpen={!!selectedRecording}
         onClose={() => setSelectedRecording(null)}
         audioUri={selectedRecording}
