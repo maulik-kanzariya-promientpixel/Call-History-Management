@@ -1,9 +1,9 @@
 import * as React from "react";
-import { format } from "date-fns";
+import { format, differenceInCalendarDays } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 
-import { cn } from "@/utils/general/utils";
+import { cn } from "../../utils/general/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -11,26 +11,29 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { normalizeDateRange, getDefaultDateRange } from "@/utils/date/date";
-import { useCallHistory } from "../../context/CallHistoryContext";
+import { normalizeDateRange } from "../../utils/date/date";
+import { useCallHistory } from "@/context/CallHistoryContext";
+
+const MAX_DAYS = 15;
 
 export function DateRangePicker() {
+    const { dateRange, setDateRange } = useCallHistory();
     const [date, setDate] = React.useState<DateRange | undefined>();
     const [warning, setWarning] = React.useState<string | null>(null);
 
-    const { setDateRange } = useCallHistory();
-
     React.useEffect(() => {
-        const todayRange = getDefaultDateRange();
         setDate({
-            from: new Date(todayRange.startTime),
-            to: new Date(todayRange.endTime),
+            from: new Date(dateRange.startTime),
+            to: new Date(dateRange.endTime),
         });
-
-    }, []);
+    }, [dateRange.startTime, dateRange.endTime]);
 
     const handleSelect = (range?: DateRange) => {
         if (!range?.from) return;
+
+        const toDate = range.to ?? range.from;
+        const selectedDays =
+            differenceInCalendarDays(toDate, range.from) + 1;
 
         const result = normalizeDateRange(range.from, range.to);
 
@@ -44,7 +47,7 @@ export function DateRangePicker() {
             endTime: result.endTime,
         });
 
-        setWarning(result.isClamped ? "Maximum 15 days allowed" : null);
+        setWarning(selectedDays > MAX_DAYS ? "Maximum 15 days allowed" : null);
     };
 
     return (
@@ -54,7 +57,7 @@ export function DateRangePicker() {
                     <Button
                         variant="outline"
                         className={cn(
-                            "w-[260px] justify-start text-left font-normal",
+                            "w-[280px] justify-start text-left font-normal",
                             "bg-background text-foreground",
                             !date && "text-muted-foreground"
                         )}
@@ -75,7 +78,7 @@ export function DateRangePicker() {
                     </Button>
                 </PopoverTrigger>
 
-                <PopoverContent className="w-auto p-2" align="start">
+                <PopoverContent className="w-95 rounded-md p-2 dark:bg-white dark:text-black" align="start">
                     <Calendar
                         mode="range"
                         selected={date}

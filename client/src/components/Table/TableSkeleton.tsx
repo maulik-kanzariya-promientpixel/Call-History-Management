@@ -12,7 +12,7 @@ export const TableSkeleton: React.FC<TableSkeletonProps> = ({ columns, rows = 5 
       {Array.from({ length: rows }).map((_, rowIndex) => (
         <TableRow key={rowIndex}>
           {Array.from({ length: columns }).map((_, colIndex) => (
-            <TableCell key={colIndex}>
+            <TableCell key={colIndex} className="px-2 py-2">
               <Skeleton className="h-4 w-full" />
             </TableCell>
           ))}

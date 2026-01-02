@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useState, useEffect, useCallback, useRef } from "react";
+import React, { createContext, useState } from "react";
 import type { ReactNode } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import type { CallHistory } from "@/types/CallHistory";
 import { fetchCallHistory } from "@/services/callHistoryService";
-import { getDefaultDateRange } from "@/utils/date/date";
+import { getDefaultDateRange } from "../utils/date/date";
 
 export interface DateRangeParams {
   startTime: string;
@@ -15,75 +14,68 @@ export interface CallHistoryContextType {
   history: CallHistory[];
   loading: boolean;
   error: string | null;
+  dateRange: DateRangeParams;
   setDateRange: (range: DateRangeParams) => void;
-  loadMore: () => void;
-  hasMore: boolean;
+  setSearchString: (value: string) => void;
+  fetchNextPage: () => void;
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
 }
 
-export const CallHistoryContext = createContext<CallHistoryContextType | undefined>(undefined);
+export const CallHistoryContext =
+  createContext<CallHistoryContextType | undefined>(undefined);
 
-export const CallHistoryProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [history, setHistory] = useState<CallHistory[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [dateRange, setDateRangeState] = useState<DateRangeParams>(getDefaultDateRange());
-  const [nextToken, setNextToken] = useState<string | null>(null);
-  
-  const isInitialMount = useRef(true);
-  const LIMIT = 10;
+const LIMIT = 10;
 
-  const loadData = useCallback(async (token: string | null = null, range?: DateRangeParams) => {
-    setLoading(true);
-    setError(null);
+export const CallHistoryProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [dateRange, setDateRangeState] = useState<DateRangeParams>(
+    getDefaultDateRange()
+  );
+  const [searchString, setSearchString] = useState("");
 
-    const usedRange = range ?? dateRange;
-
-    try {
-      const response = await fetchCallHistory({
-        startTime: usedRange.startTime,
-        endTime: usedRange.endTime,
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error,
+  } = useInfiniteQuery({
+    queryKey: [
+      "callHistory",
+      dateRange.startTime,
+      dateRange.endTime,
+      searchString,
+    ],
+    queryFn: ({ pageParam }) =>
+      fetchCallHistory({
+        startTime: dateRange.startTime,
+        endTime: dateRange.endTime,
         limit: LIMIT,
-        nextToken: token ?? undefined,
-      });
+        nextToken: pageParam,
+        searchString: searchString || undefined,
+      }),
+    getNextPageParam: (lastPage) => lastPage.nextToken ?? undefined,
+    initialPageParam: undefined as string | undefined,
+    staleTime: 1000 * 60 * 5,
+  });
 
-      setHistory(prev => token ? [...prev, ...response.items] : response.items);
-      setNextToken(response.nextToken ?? null);
-    } catch (err: any) {
-      setError(err?.message ?? "Failed to load call history");
-    } finally {
-      setLoading(false);
-    }
-  }, [dateRange]);
-
-  const setDateRange = useCallback((range: DateRangeParams) => {
-    setDateRangeState(range);
-    setHistory([]);
-    setNextToken(null);
-    loadData(null, range);
-  }, [loadData]);
-
-  const loadMore = useCallback(() => {
-    if (nextToken && !loading) {
-      loadData(nextToken);
-    }
-  }, [nextToken, loading, loadData]);
-
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      loadData(null, dateRange);
-    }
-  }, [dateRange, loadData]);
+  const history = data?.pages.flatMap((p) => p.items) ?? [];
 
   return (
     <CallHistoryContext.Provider
       value={{
         history,
-        loading,
-        error,
-        setDateRange,
-        loadMore,
-        hasMore: !!nextToken,
+        loading: isLoading,
+        error: error?.message ?? null,
+        dateRange,
+        setDateRange: setDateRangeState,
+        setSearchString,
+        fetchNextPage,
+        hasNextPage: !!hasNextPage,
+        isFetchingNextPage,
       }}
     >
       {children}
@@ -93,6 +85,8 @@ export const CallHistoryProvider: React.FC<{ children: ReactNode }> = ({ childre
 
 export const useCallHistory = () => {
   const context = React.useContext(CallHistoryContext);
-  if (!context) throw new Error("useCallHistory must be used within CallHistoryProvider");
+  if (!context) {
+    throw new Error("useCallHistory must be used within CallHistoryProvider");
+  }
   return context;
 };
