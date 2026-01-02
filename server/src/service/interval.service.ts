@@ -7,7 +7,8 @@ export default async function getRecords(
   startDate: string,
   endDate: string,
   limit: number = 10,
-  nextToken: string | null = null
+  nextToken: string | null = null,
+  searchString?: string
 ) {
   try {
     const allMonths = getMonthsBetween(startDate, endDate);
@@ -42,7 +43,7 @@ export default async function getRecords(
       const tableName = process.env.TABLE_NAME || "call-history";
       const gsiName = "dateIndex";
 
-      const command = new QueryCommand({
+      const commandParams: any = {
         TableName: tableName,
         IndexName: gsiName,
         KeyConditionExpression:
@@ -52,11 +53,18 @@ export default async function getRecords(
           ":startTime": monthStartDate,
           ":endTime": monthEndDate,
         },
-        ScanIndexForward: true,
+        ScanIndexForward: false,
         Limit: limit - allResults.length,
         ...(lastKey &&
           i === currentMonthIndex && { ExclusiveStartKey: lastKey }),
-      });
+      };
+
+      if (searchString) {
+        commandParams.FilterExpression = "contains(compositeKey, :searchString)";
+        commandParams.ExpressionAttributeValues[":searchString"] = searchString;
+      }
+
+      const command = new QueryCommand(commandParams);
 
       console.log(
         `[DEBUG] Querying table: ${tableName}, GSI: ${gsiName}, Month: ${monthKey}`

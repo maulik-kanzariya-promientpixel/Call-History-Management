@@ -4,7 +4,7 @@ import getRecords from "../service/interval.service";
 
 export async function getHistory(req: Request, res: Response) {
   try {
-    const { startTime, endTime, limit = "10", nextToken } = req.query;
+    const { startTime, endTime, limit = "10", nextToken, searchString } = req.query;
 
     if (!startTime || !endTime) {
       return res.status(400).json({
@@ -18,7 +18,8 @@ export async function getHistory(req: Request, res: Response) {
       startTime as string,
       endTime as string,
       parsedLimit,
-      (nextToken as string) || null
+      (nextToken as string) || null,
+      searchString as string || undefined
     );
 
     res.status(200).json(history);
@@ -68,3 +69,7 @@ export async function getRecording(req: Request, res: Response) {
     });
   }
 }
+
+
+
+
