@@ -7,3 +7,4 @@ historyRouter.get("/history", getHistory);
 historyRouter.get("/recording/:contactId", getRecording);
 
 export default historyRouter;
+ 
