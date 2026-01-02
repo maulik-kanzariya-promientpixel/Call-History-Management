@@ -15,6 +15,7 @@ export interface CallHistoryContextType {
   loading: boolean;
   error: string | null;
   dateRange: DateRangeParams;
+  searchString: string;
   setDateRange: (range: DateRangeParams) => void;
   setSearchString: (value: string) => void;
   fetchNextPage: () => void;
@@ -71,6 +72,7 @@ export const CallHistoryProvider: React.FC<{ children: ReactNode }> = ({
         loading: isLoading,
         error: error?.message ?? null,
         dateRange,
+        searchString,
         setDateRange: setDateRangeState,
         setSearchString,
         fetchNextPage,

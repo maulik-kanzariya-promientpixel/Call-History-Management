@@ -153,6 +153,9 @@ export async function streamFileData(req: Request, res: Response) {
       }
     } while (nextToken);
 
+    res.write(`\n# Total records exported: ${totalRecords}\n`);
+    res.write(`# Export completed at: ${new Date().toISOString()}\n`);
+
     res.end();
   } catch (error) {
     console.error("[ERROR] CSV streaming error:", error);
@@ -164,8 +167,7 @@ export async function streamFileData(req: Request, res: Response) {
       });
     } else {
       res.write(
-        `# Export failed: ${
-          error instanceof Error ? error.message : "Unknown error"
+        `# Export failed: ${error instanceof Error ? error.message : "Unknown error"
         }\n`
       );
       res.end();
