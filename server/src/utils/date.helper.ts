@@ -34,8 +34,3 @@ export function getMonthDateRange(
 
   return { start: rangeStart, end: rangeEnd };
 }
-
-
-console.log(getMonthsBetween("2024-01-01", "2026-12-01"));
-console.log(getMonthDateRange("2025-11", "2025-11-10", "2026-01-20"));
-
