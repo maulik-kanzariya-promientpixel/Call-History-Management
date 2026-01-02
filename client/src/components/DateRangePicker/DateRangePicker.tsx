@@ -51,7 +51,7 @@ export function DateRangePicker() {
     };
 
     return (
-        <div className="flex flex-col gap-1">
+        <div className="relative">
             <Popover>
                 <PopoverTrigger asChild>
                     <Button
@@ -66,8 +66,7 @@ export function DateRangePicker() {
                         {date?.from ? (
                             date.to ? (
                                 <>
-                                    {format(date.from, "LLL dd, y")} –{" "}
-                                    {format(date.to, "LLL dd, y")}
+                                    {format(date.from, "LLL dd, y")} – {format(date.to, "LLL dd, y")}
                                 </>
                             ) : (
                                 format(date.from, "LLL dd, y")
@@ -78,7 +77,10 @@ export function DateRangePicker() {
                     </Button>
                 </PopoverTrigger>
 
-                <PopoverContent className="w-95 rounded-md p-2 dark:bg-white dark:text-black" align="start">
+                <PopoverContent
+                    className="w-95 rounded-md p-2 dark:bg-white dark:text-black"
+                    align="start"
+                >
                     <Calendar
                         mode="range"
                         selected={date}
@@ -90,7 +92,9 @@ export function DateRangePicker() {
             </Popover>
 
             {warning && (
-                <span className="text-xs text-destructive">{warning}</span>
+                <span className="absolute left-0 mt-14 text-xs text-destructive">
+                    {warning}
+                </span>
             )}
         </div>
     );

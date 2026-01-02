@@ -84,7 +84,9 @@ const ContactHistory = () => {
             <TableHeader>
               <TableRow>
                 {columns.map((col) => (
-                  <TableHead key={col.key}>{col.label}</TableHead>
+                  <TableHead key={col.key} className="text-center">
+                    {col.label}
+                  </TableHead>
                 ))}
               </TableRow>
             </TableHeader>
@@ -103,7 +105,7 @@ const ContactHistory = () => {
                   {history.map((row) => (
                     <TableRow key={String(row.contactId)}>
                       {columns.map((col) => (
-                        <TableCell key={col.key}>
+                        <TableCell key={col.key} className="text-center">
                           {col.key === "audio" ? (
                             row.recordingS3Uri ? (
                               <Button
@@ -119,12 +121,14 @@ const ContactHistory = () => {
                                 )}
                               </Button>
                             ) : (
-                              "-"
+                              <span className="block text-center">-</span>
                             )
                           ) : (
-                            String((row as any)[col.key] ?? "-")
+                            <span className="block text-center">{String((row as any)[col.key] ?? "-")}</span>
                           )}
                         </TableCell>
+
+
                       ))}
                     </TableRow>
                   ))}
