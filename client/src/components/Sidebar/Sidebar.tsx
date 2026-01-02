@@ -12,7 +12,7 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar"
 
-import { ThemeToggle } from "./theme-toggle"
+import { ThemeToggle } from "../ThemeToggle/ThemeToggle"
 import { Home, Settings, PanelLeft } from "lucide-react"
 
 export function AppSidebar() {
@@ -35,7 +35,7 @@ export function AppSidebar() {
                     <span className="text-sm font-semibold tracking-wide">Dashboard</span>
                 )}
                 <SidebarTrigger>
-                    <PanelLeft className="h-5 w-5" />
+                    <PanelLeft className="h-5 w-5"/>
                 </SidebarTrigger>
             </div>
 

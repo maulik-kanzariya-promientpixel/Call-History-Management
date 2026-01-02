@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
-import MainLayout from "../Layout/MainLayout";
-import UserDashboard from "../pages/UserDashboard";
-import ContactHistory from "../pages/ContactHistory";
+import MainLayout from "../layout/MainLayout";
+import UserDashboard from "../pages/dashboard/UserDashboard";
+import ContactHistory from "../pages/contact/ContactHistory";
 
 export const router = createBrowserRouter([
   {
