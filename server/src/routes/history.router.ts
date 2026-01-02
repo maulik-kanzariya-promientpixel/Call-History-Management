@@ -12,3 +12,4 @@ historyRouter.get("/recording/:contactId", getRecording);
 historyRouter.get("/export", streamFileData);
 
 export default historyRouter;
+ 

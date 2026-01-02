@@ -143,10 +143,6 @@ export async function streamFileData(req: Request, res: Response) {
         totalRecords += batch.items.length;
         nextToken = batch.nextToken;
 
-        console.log(
-          `[DEBUG] Streamed ${batch.items.length} records, total: ${totalRecords}`
-        );
-
         if (batch.hasMore) {
           await new Promise((resolve) => setTimeout(resolve, 10));
         }
@@ -157,11 +153,7 @@ export async function streamFileData(req: Request, res: Response) {
       }
     } while (nextToken);
 
-    res.write(`# Total records exported: ${totalRecords}\n`);
-    res.write(`# Export completed at: ${new Date().toISOString()}\n`);
-
     res.end();
-    console.log(`[INFO] CSV export completed. Total records: ${totalRecords}`);
   } catch (error) {
     console.error("[ERROR] CSV streaming error:", error);
 
