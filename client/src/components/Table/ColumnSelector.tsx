@@ -25,18 +25,24 @@ const ColumnSelector = ({ selected, onChange }: Props) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm">
-          <SlidersHorizontal className="mr-2 h-4 w-4" />
-          Columns
+        <Button variant="outline" size="sm" className="gap-2">
+          <SlidersHorizontal className="h-4 w-4" />
+          <span>Columns</span>
+          {selected.length > 0 && (
+            <span className="ml-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-xs font-medium text-primary">
+              {selected.length}
+            </span>
+          )}
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-48">
+      <DropdownMenuContent align="end" className="w-52">
         {EXTRA_COLUMNS.map((col) => (
           <DropdownMenuCheckboxItem
             key={col.key}
             checked={selected.includes(col.key)}
             onCheckedChange={() => toggle(col.key)}
+            className="cursor-pointer"
           >
             {col.label}
           </DropdownMenuCheckboxItem>

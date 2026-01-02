@@ -3,7 +3,7 @@ import { Download, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useCallHistory } from "@/context/CallHistoryContext"
 
-const DownloadCsvButton = () => {
+const DownloadCSV = () => {
     const { dateRange, searchString } = useCallHistory();
     const [isDownloading, setIsDownloading] = useState(false);
 
@@ -22,15 +22,12 @@ const DownloadCsvButton = () => {
 
             const url = `http://localhost:3000/export?${params.toString()}`;
 
-           
             const link = document.createElement('a');
             link.href = url;
             link.setAttribute('download', 'call-history.csv');
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-
-            console.log("CSV download started");
         } catch (error) {
             console.error("Export failed:", error);
         } finally {
@@ -43,16 +40,21 @@ const DownloadCsvButton = () => {
             variant="outline"
             onClick={handleDownload}
             disabled={isDownloading}
-            className="cursor-pointer"
+            className="gap-2"
         >
             {isDownloading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Exporting...</span>
+                </>
             ) : (
-                <Download className="mr-2 h-4 w-4" />
+                <>
+                    <Download className="h-4 w-4" />
+                    <span>Export CSV</span>
+                </>
             )}
-            Download CSV
         </Button>
     )
 }
 
-export default DownloadCsvButton
+export default DownloadCSV

@@ -4,14 +4,18 @@ import Searchbar from "../Searchbar/Searchbar";
 
 const Navbar = () => {
   return (
-    <div className="flex items-center justify-between gap-4 px-6 py-4 border-b border-border bg-background">
-      <DateRangePicker />
-      <div className="flex items-center gap-2">
-        <Searchbar />
-        <DownloadCSV />
+    <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-14 items-center justify-between gap-4 px-6">
+        <div className="flex items-center gap-4">
+          <DateRangePicker />
+        </div>
+        
+        <div className="flex items-center gap-3">
+          <Searchbar />
+          <DownloadCSV />
+        </div>
       </div>
-    </div>
-
+    </header>
   );
 };
 

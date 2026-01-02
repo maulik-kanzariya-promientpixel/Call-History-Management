@@ -78,7 +78,7 @@ export function DateRangePicker() {
                 </PopoverTrigger>
 
                 <PopoverContent
-                    className="w-95 rounded-md p-2 dark:bg-white dark:text-black"
+                    className="w-auto rounded-lg p-3"
                     align="start"
                 >
                     <Calendar
@@ -92,9 +92,9 @@ export function DateRangePicker() {
             </Popover>
 
             {warning && (
-                <span className="absolute left-0 mt-14 text-xs text-destructive">
+                <div className="absolute left-0 top-full mt-2 text-xs text-destructive font-medium">
                     {warning}
-                </span>
+                </div>
             )}
         </div>
     );
