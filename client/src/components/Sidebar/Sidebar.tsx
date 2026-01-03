@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom"
+import { NavLink, useLocation } from "react-router-dom"
 import {
     Sidebar,
     SidebarContent,
@@ -8,16 +8,18 @@ import {
     SidebarGroupContent,
     SidebarMenu,
     SidebarMenuItem,
+    SidebarMenuButton,
     SidebarTrigger,
     useSidebar,
 } from "@/components/ui/sidebar"
 
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle"
-import { LayoutDashboard, Phone, PanelLeft } from "lucide-react"
+import { LayoutDashboard, Phone } from "lucide-react"
 import { cn } from "@/utils/general/utils"
 
 export function AppSidebar() {
     const { state } = useSidebar()
+    const location = useLocation()
 
     const menuItems = [
         { name: "Dashboard", icon: LayoutDashboard, path: "/" },
@@ -29,7 +31,10 @@ export function AppSidebar() {
             collapsible="icon"
             className="[--sidebar-width:240px] border-r border-border/40"
         >
-            <div className="flex items-center justify-between px-4 py-4 border-b border-border/40">
+            <div className={cn(
+                "flex items-center border-b border-border/40 py-4",
+                state === "expanded" ? "justify-between px-4" : "justify-center"
+            )}>
                 {state === "expanded" && (
                     <div className="flex flex-col">
                         <span className="text-lg font-bold tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
@@ -38,14 +43,12 @@ export function AppSidebar() {
                         <span className="text-xs text-muted-foreground">Call Management</span>
                     </div>
                 )}
-                <SidebarTrigger className="ml-auto">
-                    <PanelLeft className="h-5 w-5"/>
-                </SidebarTrigger>
+                <SidebarTrigger className={state === "expanded" ? "ml-auto" : ""} />
             </div>
 
-            <SidebarContent className="px-3">
+            <SidebarContent className="px-3 group-data-[collapsible=icon]:px-0">
                 <SidebarGroup>
-                    <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground uppercase tracking-wider group-data-[collapsible=icon]:hidden">
                         Navigation
                     </SidebarGroupLabel>
 
@@ -53,23 +56,22 @@ export function AppSidebar() {
                         <SidebarMenu className="space-y-1">
                             {menuItems.map((item) => {
                                 const Icon = item.icon
+                                const isActive = item.path === "/" 
+                                    ? location.pathname === "/"
+                                    : location.pathname.startsWith(item.path)
+                                
                                 return (
                                     <SidebarMenuItem key={item.name}>
-                                        <NavLink
-                                            to={item.path}
-                                            className={({ isActive }) =>
-                                                cn(
-                                                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
-                                                    "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                                                    isActive
-                                                        ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
-                                                        : "text-sidebar-foreground"
-                                                )
-                                            }
+                                        <SidebarMenuButton
+                                            asChild
+                                            isActive={isActive}
+                                            tooltip={item.name}
                                         >
-                                            <Icon className="h-5 w-5 shrink-0" />
-                                            {state === "expanded" && <span>{item.name}</span>}
-                                        </NavLink>
+                                            <NavLink to={item.path}>
+                                                <Icon className="h-5 w-5 shrink-0" />
+                                                <span>{item.name}</span>
+                                            </NavLink>
+                                        </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 )
                             })}
