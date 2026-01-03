@@ -27,7 +27,6 @@ export interface CallHistoryApiResponse {
   totalScanned: number;
 }
 
-
 export interface FetchHistoryParams {
   startTime: string;
   endTime: string;
@@ -35,5 +34,3 @@ export interface FetchHistoryParams {
   nextToken?: string | null;
   searchString?: string;
 }
-
-

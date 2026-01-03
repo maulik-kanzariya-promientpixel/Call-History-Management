@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/sidebar"
 
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle"
-import { LayoutDashboard, Phone } from "lucide-react"
+import { LayoutDashboard, Phone, User } from "lucide-react"
 import { cn } from "@/utils/general/utils"
 
 export function AppSidebar() {
@@ -23,6 +23,7 @@ export function AppSidebar() {
 
     const menuItems = [
         { name: "Dashboard", icon: LayoutDashboard, path: "/" },
+        {name:"My History",icon:User,path:"/my-history"},
         { name: "Call History", icon: Phone, path: "/history" },
     ]
 
