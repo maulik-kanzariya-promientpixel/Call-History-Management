@@ -135,7 +135,7 @@ const ContactHistory = () => {
       case "contactId": {
         return (
           <span className="font-mono text-sm font-semibold">
-            {String(value).slice(0, 8)}...
+            {String(value)}
           </span>
         );
       }
@@ -163,7 +163,7 @@ const ContactHistory = () => {
             <TableHeader>
               <TableRow className="bg-muted/50 hover:bg-muted/50">
                 {columns.map((col) => (
-                  <TableHead key={col.key} className="font-semibold text-foreground">
+                  <TableHead key={col.key} className="font-semibold text-foreground text-center">
                     {col.label}
                   </TableHead>
                 ))}

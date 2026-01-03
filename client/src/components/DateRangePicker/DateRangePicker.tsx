@@ -78,7 +78,7 @@ export function DateRangePicker() {
                 </PopoverTrigger>
 
                 <PopoverContent
-                    className="w-auto rounded-lg p-3"
+                    className="w-auto rounded-lg p-3 bg-white text-black"
                     align="start"
                 >
                     <Calendar
