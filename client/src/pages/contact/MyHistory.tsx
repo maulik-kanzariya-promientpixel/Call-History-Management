@@ -47,6 +47,10 @@ const MyHistory = () => {
       setSearchString(currentUser);
     }
     initializedRef.current = true;
+
+    return ()=>{
+      setSearchString("");
+    }
   }, [currentUser, setSearchString]);
 
   const filteredHistory = history.filter((row) => row.agentUsername === currentUser);

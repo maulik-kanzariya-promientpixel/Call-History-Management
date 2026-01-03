@@ -157,7 +157,7 @@ const ContactHistory = () => {
         <ColumnSelector selected={extraColumns} onChange={setExtraColumns} />
       </div>
 
-      <div className="rounded-lg border border-border/50 bg-card shadow-sm overflow-hidden">
+      <div className="rounded-lg border border-border bg-card shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
