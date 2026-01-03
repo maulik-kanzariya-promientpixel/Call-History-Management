@@ -3,6 +3,7 @@ import { router } from "./routes/AppRoutes";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { CallHistoryProvider } from "./context/CallHistoryContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { LoginProvider } from "./context/LoginContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,9 +19,11 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
+        <LoginProvider>
         <CallHistoryProvider>
           <RouterProvider router={router} />
         </CallHistoryProvider>
+        </LoginProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
